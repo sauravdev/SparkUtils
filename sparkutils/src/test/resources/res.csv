@@ -1,0 +1,6 @@
+PK_Column,Data_Col1,Data_Col2,Partition_Column,dl_load_flag
+1,saurav,100,2018,N
+2,gaurav,200,2018,Y
+3,saroj,300,2018,N
+1,saurav,200,2018,Y
+4,priyanshu,400,2018,Y

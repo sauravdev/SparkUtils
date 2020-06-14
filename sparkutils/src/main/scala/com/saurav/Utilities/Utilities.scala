@@ -120,6 +120,7 @@ object Utilities {
    * @param hdfsUri - HDFS Uri
    * @return
    */
+
   def readProperties(inputPath: String, hdfsUri: Option[String] = None): OrderedProperties = {
     val logger = Logger.getLogger(getClass.getName)
     logger.info("READING PROPERTIES FILE @@@@@@@@@@@@@@@@@@@@@@")
@@ -351,13 +352,25 @@ object Utilities {
     return List(validRecords, invalidRecords)
   }
 
+  /**
+   * This method is responsible for performing the CDC Type 2 on Incremental data without using MD5
+   * @param incremental_df 			 : DataFrame of delta(incremental) data to be processed
+   * @param target_df 					 : Historical data on which CDC needs to be processed
+   * @param primary_key_col_list : Primay Keys column list
+   * @param cdc_schema 					 : Schema to be considered for performing the CDC
+   * @param partition_col				 : Column to used for identifying the partition of the target(historical) data on which CDC needs to be performed
+   * @param start_date 					 : Optional parameter of Start Date
+   * @param end_date   					 : Optional parameter of End Date
+   * @return 										 : DataFrame of processed data post CDC operation OR NULL if any exception
+   */
   def IncrementalType2NonMD5(
+    spark:                SparkSession,
     incremental_df:       DataFrame,
     target_df:            DataFrame,
     primary_key_col_list: Array[String],
     partition_col:        String,
     start_date:           String,
-    end_date:             String)(implicit spark: SparkSession): DataFrame = {
+    end_date:             String): DataFrame = {
     try {
       logger.info("Starting CDC")
       target_df.createOrReplaceTempView("TGT_DF")
